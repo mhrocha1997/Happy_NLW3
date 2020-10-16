@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import {getRepository}  from 'typeorm';
+import {getRepository, UpdateDateColumn}  from 'typeorm';
 import Orphanage from '../models/Orphanage';
 import orphanages_view from '../views/orphanages_view';
 import * as Yup from 'yup';
@@ -85,6 +85,44 @@ export default{
     
        await orphanagesRepository.save(orphanage);
         
+       response.status(201).json(orphanage);
+    },
+
+    async update(request: Request, response: Response){
+        const {id} = request.params;
+        
+        const {
+            name,
+            latitude,
+            longitude,
+            about,
+            instructions,
+            opening_hours,
+            open_on_weekends,
+        } = request.body;
+
+
+        const orphanagesRepository = getRepository(Orphanage);
+        
+        const requestImages = request.files as Express.Multer.File[];
+
+        const images = requestImages.map(image=>{
+            return{path: image.filename}
+        });
+
+
+
+        await orphanagesRepository.update(id,{
+            name,
+            latitude,
+            longitude,
+            about,
+            instructions,
+            opening_hours,
+            open_on_weekends,
+        });
+        
+        const orphanage = await orphanagesRepository.findOneOrFail(id);
        response.status(201).json(orphanage);
     }
 }
