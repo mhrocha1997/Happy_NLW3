@@ -62,6 +62,7 @@ export default function OrphanageDetails() {
               style={styles.image} 
               source={{ uri: image.url  }} />
               
+              
             );
           })}
         </ScrollView>

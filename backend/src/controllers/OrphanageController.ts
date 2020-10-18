@@ -124,5 +124,15 @@ export default{
         
         const orphanage = await orphanagesRepository.findOneOrFail(id);
        response.status(201).json(orphanage);
+    },
+
+    async delete(request: Request, response: Response){
+        const {id} = request.params;
+
+        const orphanagesRepository = getRepository(Orphanage);
+
+        await orphanagesRepository.delete(id);
+
+        response.status(201).json({message: 'Orfanato Excluído com sucesso'});
     }
 }
